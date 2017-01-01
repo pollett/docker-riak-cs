@@ -1,3 +1,7 @@
+## 0.8.0
+
+* Update riak
+
 ## 0.7.2
 
 * Fix container ID extraction by container name.
