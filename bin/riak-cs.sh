@@ -14,7 +14,7 @@ sed -i.bak "s/127.0.0.1/${IP_ADDRESS}/" /etc/riak-cs/riak-cs.conf
 
 # Connect Riak CS instances to Stanchion
 if env | egrep -q "SEED_PORT_8080_TCP_ADDR"; then
-  sed -i.bak "s/{stanchion_ip, \"127.0.0.1\"},/{stanchion_ip, \"${SEED_PORT_8080_TCP_ADDR}\"},/" /etc/riak-cs/app.config
+  sed -i.bak "s/stanchion_host = 127.0.0.1:8085/stanchion_host = ${SEED_PORT_8080_TCP_ADDR}/" /etc/riak-cs/riak-cs.conf
 fi
 
 # Start Riak CS
