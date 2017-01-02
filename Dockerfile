@@ -56,8 +56,19 @@ ADD bin/serf.sh /etc/service/serf/run
 ADD bin/peer-member-join.sh /etc/service/serf/
 ADD bin/seed-member-join.sh /etc/service/serf/
 
-RUN sed -i.bak 's/^storage_backend =/#storage_backend =/' /etc/riak/riak.conf && \
-    echo "buckets.default.allow_mult = true" >> /etc/riak/riak.conf
+RUN sed -i.bak 's/^storage_backend = bitcask/storage_backend = leveldb/' /etc/riak/riak.conf && \
+    sed -i.bak 's/^listener.http.internal = 127.0.0.1:8098/listener.http.internal = 0.0.0.0:8098/' /etc/riak/riak.conf && \
+    sed -i.bak 's/^listener = 127.0.0.1/listener = 0.0.0.0/' /etc/riak-cs/riak-cs.conf && \
+    sed -i.bak 's/^listener = 127.0.0.1/listener = 0.0.0.0/' /etc/stanchion/stanchion.conf && \
+    sed -i.bak 's/^anonymous_user_creation = off/anonymous_user_creation = on/' /etc/riak-cs/riak-cs.conf && \
+    echo "buckets.default.allow_mult = true" >> /etc/riak/riak.conf && \
+    echo "erlang.max_ports = 65536" >> /etc/riak/riak.conf && \
+    echo "javascript.map_pool_size = 0" >> /etc/riak/riak.conf && \
+    echo "javascript.reduce_pool_size = 0" >> /etc/riak/riak.conf && \
+    echo "javascript.hook_pool_size = 0" >> /etc/riak/riak.conf && \
+    echo "admin.secret = admin-secret" >> /etc/riak-cs/riak-cs.conf && \
+    echo "admin.secret = admin-secret" >> /etc/stanchion/stanchion.conf
+
 
 # Make the Riak, Riak CS, and Stanchion log directories into volumes
 VOLUME /var/lib/riak
